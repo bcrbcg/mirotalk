@@ -23,9 +23,10 @@ jobs:
         with:
           flutter-version: '3.19.0'
 
-      - name: Generate Native Android Files
+      - name: Re-create Android Project
         run: |
           cd mobile_app
+          rm -rf android
           flutter create . --org com.mirotalk.app --platforms android
 
       - name: Install dependencies
@@ -34,7 +35,7 @@ jobs:
 
       - name: Build APK
         working-directory: mobile_app
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
