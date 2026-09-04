@@ -29,6 +29,10 @@ jobs:
           rm -rf android
           flutter create . --org com.mirotalk.app --platforms android
 
+      - name: Fix Min SDK Version
+        run: |
+          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 24/g' mobile_app/android/app/build.gradle
+
       - name: Install dependencies
         working-directory: mobile_app
         run: flutter pub get
