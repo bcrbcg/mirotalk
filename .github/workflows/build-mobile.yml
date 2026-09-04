@@ -3,15 +3,17 @@ name: Build Mobile App APK
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -21,9 +23,10 @@ jobs:
         with:
           flutter-version: '3.19.0'
 
-      - name: Create Flutter Project Skeleton
+      - name: Generate Native Android Files
         run: |
-          flutter create --template=app --overwrite mobile_app
+          cd mobile_app
+          flutter create . --org com.mirotalk.app --platforms android
 
       - name: Install dependencies
         working-directory: mobile_app
@@ -34,7 +37,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mirotalk-release-apk
           path: mobile_app/build/app/outputs/flutter-apk/app-release.apk
